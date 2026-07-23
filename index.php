@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Data Tim UKK BPS Provinsi NTB</title>
+  <meta name="description" content="Pusat data, visualisasi interaktif, dataset, publikasi, dan bahan paparan statistik resmi Tim UKK Badan Pusat Statistik Provinsi Nusa Tenggara Barat.">
+  <meta name="keywords" content="BPS NTB, statistik NTB, data NTB, kemiskinan NTB, PDRB NTB, publikasi BPS">
+  <meta property="og:title" content="Portal Data Tim UKK BPS Provinsi NTB">
+  <meta property="og:description" content="Pusat data dan statistik resmi Tim UKK BPS Provinsi Nusa Tenggara Barat.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#1E40AF">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- ============================================================
+     LOADING OVERLAY
+     ============================================================ -->
+<div id="loading-overlay" class="loading-overlay">
+  <div class="loading-logo">BPS NTB</div>
+  <div class="loading-spinner"></div>
+  <div class="loading-text">Memuat Portal Data…</div>
+</div>
+
+<!-- ============================================================
+     NAVIGATION
+     ============================================================ -->
+<nav class="nav" role="navigation" aria-label="Navigasi utama">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-brand">
+      <div class="nav-logo" aria-hidden="true">BPS</div>
+      <div class="nav-title">
+        <span class="nav-title-main">Tim UKK BPS Provinsi NTB</span>
+        <span class="nav-title-sub">Portal Data Statistik</span>
+      </div>
+    </a>
+
+    <div class="nav-links" role="menubar">
+      <a href="#hero" class="nav-link active" role="menuitem">Beranda</a>
+      <a href="#tab-section" class="nav-link" role="menuitem" onclick="App.switchTab('visualizations')">Visualisasi</a>
+      <a href="#tab-section" class="nav-link" role="menuitem" onclick="App.switchTab('datasets')">Dataset</a>
+      <a href="#footer" class="nav-link" role="menuitem">Tentang</a>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:10px;">
+      <a href="admin.html" class="nav-admin-btn" id="admin-nav-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Admin</span>
+      </a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Buka menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Nav -->
+  <div id="nav-mobile" class="nav-mobile" role="menu">
+    <a href="#hero" class="nav-link" role="menuitem">🏠 Beranda</a>
+    <a href="#tab-section" class="nav-link" role="menuitem">📊 Visualisasi & Data</a>
+    <a href="#footer" class="nav-link" role="menuitem">ℹ️ Tentang</a>
+    <a href="admin.html" class="nav-link" role="menuitem">🔐 Panel Admin</a>
+  </div>
+</nav>
+
+<!-- ============================================================
+     HERO SECTION
+     ============================================================ -->
+<section id="hero" class="hero" aria-labelledby="hero-heading">
+  <div class="hero-bg" aria-hidden="true">
+    <div class="hero-dots"></div>
+    <div class="hero-shape hero-shape-1"></div>
+    <div class="hero-shape hero-shape-2"></div>
+    <div class="hero-shape hero-shape-3"></div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-badge" aria-label="Identitas tim">
+      <span class="hero-badge-dot" aria-hidden="true"></span>
+      Tim UKK — Badan Pusat Statistik Provinsi NTB
+    </div>
+
+    <h1 id="hero-heading" class="hero-title">
+      Portal Data Statistik<br>
+      <span class="hero-title-accent">Nusa Tenggara Barat</span>
+    </h1>
+
+    <p class="hero-subtitle">
+      Pusat data, visualisasi interaktif, publikasi, dan bahan paparan statistik resmi Tim UKK BPS Provinsi NTB — terbuka dan dapat diunduh.
+    </p>
+
+    <div class="hero-search" role="search">
+      <input
+        type="text"
+        id="hero-search-input"
+        class="hero-search-input"
+        placeholder="Cari data, publikasi, visualisasi…"
+        aria-label="Cari konten"
+        autocomplete="off"
+      >
+      <button id="hero-search-btn" class="hero-search-btn" aria-label="Mulai pencarian">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>Cari</span>
+      </button>
+    </div>
+
+    <div class="hero-stats" role="list" aria-label="Statistik konten">
+      <div class="hero-stat" role="listitem">
+        <div class="hero-stat-number" id="stat-visualizations" data-target="5" aria-live="polite">5</div>
+        <div class="hero-stat-label">Visualisasi</div>
+      </div>
+      <div class="hero-stat" role="listitem">
+        <div class="hero-stat-number" id="stat-datasets" data-target="6" aria-live="polite">6</div>
+        <div class="hero-stat-label">Dataset</div>
+      </div>
+      <div class="hero-stat" role="listitem">
+        <div class="hero-stat-number" id="stat-publications" data-target="6" aria-live="polite">6</div>
+        <div class="hero-stat-label">Publikasi</div>
+      </div>
+      <div class="hero-stat" role="listitem">
+        <div class="hero-stat-number" id="stat-presentations" data-target="5" aria-live="polite">5</div>
+        <div class="hero-stat-label">Bahan Paparan</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll" aria-hidden="true">
+    <div class="scroll-line"></div>
+    <span>Gulir ke bawah</span>
+  </div>
+</section>
+
+<!-- ============================================================
+     TAB NAVIGATION (STICKY)
+     ============================================================ -->
+<div id="tab-section" class="tab-section">
+  <div class="tab-nav-wrapper" role="tablist" aria-label="Navigasi konten">
+    <button class="tab-btn active" data-tab="visualizations" role="tab" aria-selected="true" aria-controls="tab-visualizations" id="tabBtn-visualizations">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="18" y="3" width="4" height="18"/><rect x="10" y="8" width="4" height="13"/><rect x="2" y="13" width="4" height="8"/></svg>
+      Visualisasi Data
+      <span class="tab-count" aria-label="Jumlah">5</span>
+    </button>
+    <button class="tab-btn" data-tab="datasets" role="tab" aria-selected="false" aria-controls="tab-datasets" id="tabBtn-datasets">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+      Dataset
+      <span class="tab-count">6</span>
+    </button>
+    <button class="tab-btn" data-tab="publications" role="tab" aria-selected="false" aria-controls="tab-publications" id="tabBtn-publications">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      Publikasi
+      <span class="tab-count">6</span>
+    </button>
+    <button class="tab-btn" data-tab="presentations" role="tab" aria-selected="false" aria-controls="tab-presentations" id="tabBtn-presentations">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      Bahan Paparan
+      <span class="tab-count">5</span>
+    </button>
+  </div>
+</div>
+
+<!-- ============================================================
+     MAIN CONTENT
+     ============================================================ -->
+<main class="main" role="main">
+
+  <!-- Filter Bar -->
+  <div class="filter-bar" role="search" aria-label="Filter konten">
+    <span class="filter-label">Filter:</span>
+    <div class="filter-chips" role="group" aria-label="Filter kategori">
+      <button class="filter-chip active" data-cat="Semua">Semua</button>
+      <button class="filter-chip" data-cat="Kependudukan">Kependudukan</button>
+      <button class="filter-chip" data-cat="Ekonomi">Ekonomi</button>
+      <button class="filter-chip" data-cat="Kemiskinan">Kemiskinan</button>
+      <button class="filter-chip" data-cat="Ketenagakerjaan">Ketenagakerjaan</button>
+      <button class="filter-chip" data-cat="Pertanian">Pertanian</button>
+      <button class="filter-chip" data-cat="Sosial">Sosial</button>
+      <button class="filter-chip" data-cat="Umum">Umum</button>
+    </div>
+    <select id="year-filter" class="filter-year" aria-label="Filter tahun">
+      <option value="Semua">Semua Tahun</option>
+    </select>
+    <div style="flex:1; max-width:240px;">
+      <input
+        type="text"
+        id="filter-search-input"
+        style="width:100%;padding:8px 14px;border:1.5px solid var(--slate-200);border-radius:var(--radius-sm);font-size:13px;color:var(--slate-700);outline:none;background:white;transition:border-color 0.15s ease;"
+        placeholder="🔍 Cari…"
+        aria-label="Cari dalam konten"
+        onfocus="this.style.borderColor='var(--blue-400)'"
+        onblur="this.style.borderColor='var(--slate-200)'"
+      >
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TAB: VISUALISASI DATA
+       ============================================================ -->
+  <div id="tab-visualizations" class="tab-content active" role="tabpanel" aria-labelledby="tabBtn-visualizations">
+
+    <!-- Interactive Chart Builder -->
+    <div class="chart-builder">
+      <div class="chart-builder-header">
+        <div>
+          <div class="chart-builder-title">
+            🎛️ Eksplorasi Visualisasi Interaktif
+          </div>
+          <div class="chart-builder-subtitle">
+            Pilih dataset dan ubah jenis chart sesuai kebutuhan Anda
+          </div>
+        </div>
+        <div class="chart-type-toggle" role="group" aria-label="Pilih jenis chart">
+          <button class="chart-type-btn active" data-type="bar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="18" y="3" width="4" height="18"/><rect x="10" y="8" width="4" height="13"/><rect x="2" y="13" width="4" height="8"/></svg>
+            Bar
+          </button>
+          <button class="chart-type-btn" data-type="line">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Garis
+          </button>
+          <button class="chart-type-btn" data-type="pie">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
+            Pie
+          </button>
+          <button class="chart-type-btn" data-type="doughnut">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>
+            Donut
+          </button>
+          <button class="chart-type-btn" data-type="radar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/></svg>
+            Radar
+          </button>
+        </div>
+      </div>
+
+      <div class="chart-builder-controls">
+        <div class="control-group">
+          <label class="control-label" for="viz-selector">Dataset:</label>
+          <select id="viz-selector" class="control-select" aria-label="Pilih dataset visualisasi">
+            <option>Memuat data…</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="chart-builder-area">
+        <div style="margin-bottom:16px;">
+          <h3 id="builder-chart-title" style="font-size:16px;font-weight:700;color:var(--slate-800);"></h3>
+          <p id="builder-chart-desc" style="font-size:13px;color:var(--slate-500);margin-top:4px;"></p>
+        </div>
+        <div class="chart-canvas-wrapper">
+          <canvas id="builder-chart" aria-label="Chart visualisasi interaktif"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-export-bar">
+        <span style="font-size:12px;color:var(--slate-400);">Ekspor visualisasi:</span>
+        <button id="export-chart-btn" class="btn-export">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Unduh PNG
+        </button>
+      </div>
+    </div>
+
+    <!-- Static Charts Grid -->
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Galeri Visualisasi</h2>
+        <p class="section-subtitle">Visualisasi data yang telah dikurasi oleh Tim UKK BPS NTB</p>
+      </div>
+    </div>
+    <div id="static-charts-grid" class="charts-grid"></div>
+  </div>
+
+  <!-- ============================================================
+       TAB: DATASET
+       ============================================================ -->
+  <div id="tab-datasets" class="tab-content" role="tabpanel" aria-labelledby="tabBtn-datasets">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Dataset</h2>
+        <p class="section-subtitle">Data mentah dan olahan yang dapat diunduh secara bebas</p>
+      </div>
+    </div>
+    <div id="datasets-grid" class="content-grid"></div>
+  </div>
+
+  <!-- ============================================================
+       TAB: PUBLIKASI
+       ============================================================ -->
+  <div id="tab-publications" class="tab-content" role="tabpanel" aria-labelledby="tabBtn-publications">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Publikasi</h2>
+        <p class="section-subtitle">Laporan, analisis, dan publikasi resmi Tim UKK BPS Provinsi NTB</p>
+      </div>
+    </div>
+    <div id="publications-grid" class="content-grid"></div>
+  </div>
+
+  <!-- ============================================================
+       TAB: BAHAN PAPARAN
+       ============================================================ -->
+  <div id="tab-presentations" class="tab-content" role="tabpanel" aria-labelledby="tabBtn-presentations">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Bahan Paparan</h2>
+        <p class="section-subtitle">Materi presentasi dan paparan dari berbagai kegiatan Tim UKK BPS NTB</p>
+      </div>
+    </div>
+    <div id="presentations-grid" class="content-grid"></div>
+  </div>
+
+</main>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer id="footer" class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo-row">
+        <div class="footer-logo" aria-hidden="true">BPS</div>
+        <div>
+          <div class="footer-org-name">Tim UKK BPS Provinsi NTB</div>
+          <div class="footer-org-sub">Badan Pusat Statistik Provinsi Nusa Tenggara Barat</div>
+        </div>
+      </div>
+      <p class="footer-desc">
+        Portal data statistik resmi Tim Unit Kerja Kepala (UKK) BPS Provinsi Nusa Tenggara Barat. Menyediakan akses terbuka terhadap data, visualisasi, dan publikasi statistik.
+      </p>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;">
+        <div class="footer-contact-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          tim.ukk@ntb.bps.go.id
+        </div>
+        <div class="footer-contact-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.62 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          (62-370) 621385
+        </div>
+        <div class="footer-contact-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Jl. Dr. Soedjono No. 74 Kelurahan Jempong Baru Kecamatan Sekarbela Kota Mataram Nusa Tenggara Barat 83116
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h3 class="footer-col-title">Navigasi</h3>
+      <nav class="footer-links" aria-label="Footer navigasi">
+        <a href="#tab-section" class="footer-link" onclick="App.switchTab('visualizations')">📊 Visualisasi Data</a>
+        <a href="#tab-section" class="footer-link" onclick="App.switchTab('datasets')">📁 Dataset</a>
+        <a href="#tab-section" class="footer-link" onclick="App.switchTab('publications')">📄 Publikasi</a>
+        <a href="#tab-section" class="footer-link" onclick="App.switchTab('presentations')">📑 Bahan Paparan</a>
+        <a href="admin.html" class="footer-link">🔐 Panel Admin</a>
+      </nav>
+    </div>
+
+    <div>
+      <h3 class="footer-col-title">Tautan</h3>
+      <nav class="footer-links" aria-label="Tautan eksternal">
+        <a href="https://www.bps.go.id" target="_blank" rel="noopener" class="footer-link">🌐 BPS Pusat</a>
+        <a href="https://ntb.bps.go.id" target="_blank" rel="noopener" class="footer-link">🌐 BPS Provinsi NTB</a>
+        <a href="https://satudataindonesia.go.id" target="_blank" rel="noopener" class="footer-link">📊 Satu Data Indonesia</a>
+        <a href="#" id="footer-sheet-link" class="footer-link">📋 Google Sheet (Admin)</a>
+        <a href="#" id="footer-drive-link" class="footer-link">📂 Google Drive (Admin)</a>
+      </nav>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span class="footer-copyright">
+      © <span id="footer-year"></span> Tim UKK BPS Provinsi Nusa Tenggara Barat. Seluruh data bersifat terbuka untuk publik.
+    </span>
+    <div class="footer-bottom-links">
+      <a href="admin.html" class="footer-bottom-link">Panel Admin</a>
+      <a href="SETUP.md" class="footer-bottom-link">Panduan Setup</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     MODAL
+     ============================================================ -->
+<div id="modal-overlay" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title-group">
+        <div class="modal-category" id="modal-category">Detail</div>
+        <h2 class="modal-title" id="modal-title"></h2>
+      </div>
+      <button class="modal-close" id="modal-close" aria-label="Tutup modal">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-actions" id="modal-actions"></div>
+  </div>
+</div>
+
+<!-- ============================================================
+     TOAST CONTAINER
+     ============================================================ -->
+<div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="false"></div>
+
+<!-- ============================================================
+     BACK TO TOP
+     ============================================================ -->
+<button id="back-to-top" class="back-to-top" aria-label="Kembali ke atas">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<!-- ============================================================
+     SCRIPTS
+     ============================================================ -->
+<script src="js/config.js"></script>
+<script src="js/sheets.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/app.js"></script>
+<script>
+  // Footer year
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+  // Footer admin links
+  if (CONFIG.SHEET_URL && CONFIG.SHEET_URL !== '#') {
+    document.getElementById('footer-sheet-link').href = CONFIG.SHEET_URL;
+  }
+  if (CONFIG.DRIVE_FOLDER_URL && CONFIG.DRIVE_FOLDER_URL !== '#') {
+    document.getElementById('footer-drive-link').href = CONFIG.DRIVE_FOLDER_URL;
+  }
+</script>
+</body>
+</html>
