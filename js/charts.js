@@ -21,15 +21,15 @@ const ChartManager = {
       legend: {
         position: 'bottom',
         labels: {
-          font: { family: 'Inter', size: 12 },
+          font: { family: 'Plus Jakarta Sans', size: 12 },
           usePointStyle: true,
           padding: 16
         }
       },
       tooltip: {
         backgroundColor: 'rgba(15, 23, 42, 0.9)',
-        titleFont: { family: 'Inter', size: 13, weight: 'bold' },
-        bodyFont: { family: 'Inter', size: 12 },
+        titleFont: { family: 'Plus Jakarta Sans', size: 13, weight: 'bold' },
+        bodyFont: { family: 'Plus Jakarta Sans', size: 12 },
         padding: 12,
         cornerRadius: 8,
         titleColor: '#fff',
@@ -68,6 +68,8 @@ const ChartManager = {
       console.error('Gagal parse data_json:', e);
       return null;
     }
+
+    if (!chartData) return null;
 
     // Terapkan warna default jika belum ada
     chartData = this._applyDefaultColors(chartData, type);
@@ -149,11 +151,11 @@ const ChartManager = {
       base.scales = {
         x: {
           grid: { color: 'rgba(203, 213, 225, 0.4)', drawBorder: false },
-          ticks: { font: { family: 'Inter', size: 11 }, color: '#64748B' }
+          ticks: { font: { family: 'Plus Jakarta Sans', size: 11 }, color: '#64748B' }
         },
         y: {
           grid: { color: 'rgba(203, 213, 225, 0.4)', drawBorder: false },
-          ticks: { font: { family: 'Inter', size: 11 }, color: '#64748B' },
+          ticks: { font: { family: 'Plus Jakarta Sans', size: 11 }, color: '#64748B' },
           beginAtZero: false
         }
       };
@@ -163,8 +165,8 @@ const ChartManager = {
       base.scales = {
         r: {
           grid: { color: 'rgba(203, 213, 225, 0.5)' },
-          ticks: { font: { family: 'Inter', size: 10 }, color: '#64748B', backdropColor: 'transparent' },
-          pointLabels: { font: { family: 'Inter', size: 11 }, color: '#334155' }
+          ticks: { font: { family: 'Plus Jakarta Sans', size: 10 }, color: '#64748B', backdropColor: 'transparent' },
+          pointLabels: { font: { family: 'Plus Jakarta Sans', size: 11 }, color: '#334155' }
         }
       };
     }

@@ -7,6 +7,7 @@
   <meta name="robots" content="noindex, nofollow">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
@@ -331,6 +332,7 @@
 
 <!-- Scripts -->
 <script src="js/config.js"></script>
+<script src="js/sheets.js"></script>
 <script src="js/admin.js"></script>
 <script>
   function openSheet() {
@@ -352,11 +354,12 @@
   }
 
   function refreshData() {
-    if (typeof SheetsAPI !== 'undefined') {
+    if (typeof SheetsAPI !== 'undefined' && CONFIG.SHEET_ID) {
       SheetsAPI.clearCache();
-      alert('Cache dibersihkan. Refresh halaman portal untuk melihat data terbaru.');
+      Admin.renderStats();
+      alert('Cache berhasil dibersihkan. Memuat ulang data terbaru dari Google Sheets…');
     } else {
-      alert('Google Sheets belum terhubung. Konfigurasi SHEET_ID terlebih dahulu.');
+      alert('Google Sheets belum terhubung. Konfigurasi SHEET_ID terlebih dahulu di js/config.js.');
     }
   }
 </script>

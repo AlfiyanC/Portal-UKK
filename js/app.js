@@ -44,6 +44,23 @@ const App = {
     }
     try {
       this.state.data = await SheetsAPI.fetchAll();
+
+      // Jika tab visualisasi kosong tapi ada data di tab lain (misal datasets),
+      // otomatis alihkan tab aktif ke tab yang memiliki data agar halaman tidak terlihat kosong.
+      const tabs = ['visualizations', 'datasets', 'publications', 'presentations'];
+      const activeTabHasData = (this.state.data[this.state.activeTab] || []).length > 0;
+      if (!activeTabHasData) {
+        const firstWithData = tabs.find(t => (this.state.data[t] || []).length > 0);
+        if (firstWithData) {
+          this.state.activeTab = firstWithData;
+          document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.tab === firstWithData);
+          });
+          document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.toggle('active', content.id === `tab-${firstWithData}`);
+          });
+        }
+      }
     } catch (err) {
       console.error('Gagal memuat dari Google Sheets, beralih ke data demo:', err);
       this.state.data = {
@@ -160,7 +177,13 @@ const App = {
   },
 
   renderChartBuilder(vizData) {
-    if (!vizData.length) return;
+    const builder = document.querySelector('.chart-builder');
+    if (!vizData.length) {
+      if (builder) builder.style.display = 'none';
+      return;
+    }
+    if (builder) builder.style.display = '';
+
     const idx = Math.min(this.state.selectedVizIndex, vizData.length - 1);
     const viz = vizData[idx];
     if (!viz) return;
@@ -185,7 +208,11 @@ const App = {
     const grid = document.getElementById('static-charts-grid');
     if (!grid) return;
     if (!vizData.length) {
-      grid.innerHTML = this.emptyState(iconBarChart(32), 'Belum ada visualisasi', 'Tambahkan data visualisasi di Google Sheet Anda.');
+      grid.innerHTML = this.emptyState(
+        iconBarChart(36),
+        'Belum ada data visualisasi',
+        'Tab "visualizations" pada Google Sheet Anda belum memiliki baris data grafik. Anda dapat menambahkan data visualisasi di Google Sheet atau menjelajahi tab Dataset.'
+      );
       return;
     }
     grid.innerHTML = vizData.map((viz, i) => this.createChartCard(viz, i)).join('');
@@ -246,6 +273,7 @@ const App = {
   createDatasetCard(item) {
     const tags = item.tags ? item.tags.split(',').map(t => t.trim()).slice(0, 3) : [];
     const typeClass = `badge-type-${(item.file_type || 'default').toLowerCase()}`;
+    const hasUrl = isValidUrl(item.file_url);
     return `
     <div class="content-card ${item.featured ? 'featured' : ''}" data-id="${item.id}">
       <div class="card-top">
@@ -256,7 +284,7 @@ const App = {
         </div>
         <div class="card-icon card-icon-dataset">${iconFolder(24)}</div>
       </div>
-      <h3 class="card-title">${item.title}</h3>
+      <h3 class="card-title">${item.title || item.description || 'Dataset Tanpa Judul'}</h3>
       <p class="card-desc">${item.description}</p>
       <div class="card-meta">
         <span class="card-meta-item">${iconCalendar(13)} ${item.year}</span>
@@ -267,7 +295,7 @@ const App = {
         <button class="btn btn-secondary" onclick="App.openModal(${item.id}, 'datasets')">
           ${iconEye(14)} Detail
         </button>
-        <a href="${item.file_url || '#'}" target="_blank" rel="noopener" class="btn btn-primary" ${item.file_url && item.file_url !== '#' ? '' : 'onclick="return App.handleNoLink(event)"'}>
+        <a href="${hasUrl ? item.file_url : '#'}" target="_blank" rel="noopener" class="btn btn-primary" ${hasUrl ? '' : 'onclick="return App.handleNoLink(event)"'}>
           ${iconDownload(14)} Unduh
         </a>
       </div>
@@ -286,6 +314,7 @@ const App = {
 
   createPublicationCard(item) {
     const tags = item.tags ? item.tags.split(',').map(t => t.trim()).slice(0, 3) : [];
+    const hasUrl = isValidUrl(item.file_url);
     return `
     <div class="content-card ${item.featured ? 'featured' : ''}">
       <div class="card-top">
@@ -307,7 +336,7 @@ const App = {
         <button class="btn btn-secondary" onclick="App.openModal(${item.id}, 'publications')">
           ${iconEye(14)} Detail
         </button>
-        <a href="${item.file_url || '#'}" target="_blank" rel="noopener" class="btn btn-primary" ${item.file_url && item.file_url !== '#' ? '' : 'onclick="return App.handleNoLink(event)"'}>
+        <a href="${hasUrl ? item.file_url : '#'}" target="_blank" rel="noopener" class="btn btn-primary" ${hasUrl ? '' : 'onclick="return App.handleNoLink(event)"'}>
           ${iconDownload(14)} Unduh
         </a>
       </div>
@@ -326,6 +355,7 @@ const App = {
 
   createPresentationCard(item) {
     const tags = item.tags ? item.tags.split(',').map(t => t.trim()).slice(0, 3) : [];
+    const hasUrl = isValidUrl(item.file_url);
     return `
     <div class="content-card ${item.featured ? 'featured' : ''}">
       <div class="card-top">
@@ -347,7 +377,7 @@ const App = {
         <button class="btn btn-secondary" onclick="App.openModal(${item.id}, 'presentations')">
           ${iconEye(14)} Detail
         </button>
-        <a href="${item.file_url || '#'}" target="_blank" rel="noopener" class="btn btn-primary" ${item.file_url && item.file_url !== '#' ? '' : 'onclick="return App.handleNoLink(event)"'}>
+        <a href="${hasUrl ? item.file_url : '#'}" target="_blank" rel="noopener" class="btn btn-primary" ${hasUrl ? '' : 'onclick="return App.handleNoLink(event)"'}>
           ${iconDownload(14)} Unduh
         </a>
       </div>
@@ -393,13 +423,14 @@ const App = {
       </div>
     `).join('');
 
+    const hasUrl = isValidUrl(item.file_url);
     const actionsEl = document.getElementById('modal-actions');
     if (actionsEl) {
       actionsEl.innerHTML = `
-        <a href="${item.file_url || '#'}" target="_blank" rel="noopener" class="btn btn-primary" style="flex:1;" ${item.file_url && item.file_url !== '#' ? '' : 'onclick="return App.handleNoLink(event)"'}>
+        <a href="${hasUrl ? item.file_url : '#'}" target="_blank" rel="noopener" class="btn btn-primary" style="flex:1;" ${hasUrl ? '' : 'onclick="return App.handleNoLink(event)"'}>
           ${iconDownload(16)} Unduh File
         </a>
-        <button class="btn btn-secondary" onclick="App.copyLink('${item.file_url || ''}')">
+        <button class="btn btn-secondary" onclick="App.copyLink('${hasUrl ? item.file_url : ''}')">
           ${iconCopy(14)} Salin Link
         </button>
       `;
@@ -416,7 +447,7 @@ const App = {
   },
 
   copyLink(url) {
-    if (!url || url === '#') { this.showToast('Link file belum tersedia.', 'info'); return; }
+    if (!isValidUrl(url)) { this.showToast('Link file belum tersedia.', 'info'); return; }
     navigator.clipboard.writeText(url).then(() => this.showToast('Link berhasil disalin!', 'success'));
   },
 
@@ -631,6 +662,10 @@ const App = {
 };
 
 // ---- Utility Functions ----
+function isValidUrl(url) {
+  return !!(url && typeof url === 'string' && (url.startsWith('http://') || url.startsWith('https://')));
+}
+
 function debounce(fn, delay) {
   let timeout;
   return (...args) => {

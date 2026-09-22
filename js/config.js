@@ -10,7 +10,7 @@ const CONFIG = {
   // Google Sheets Configuration
   SHEET_ID: '17DzQkV1vssb9LSlqTJhIg3SWnHDtlxvB7_ID4jqlk_M',               // ← Isi Sheet ID Anda di sini
   DEMO_MODE: false,            // ← Ubah ke false setelah Sheet dikonfigurasi
-  SHEET_URL: 'https://docs.google.com/spreadsheets/d/17DzQkV1vssb9LSlqTJhIg3SWnHDtlxvB7_ID4jqlk_M/edit?usp=sharing',             // ← Link ke Google Sheet Anda
+  SHEET_URL: 'https://docs.google.com/spreadsheets/d/17DzQkV1vssb9LSlqTJhIg3SWnHDtlxvB7_ID4jqlk_M/edit?gid=0#gid=0',             // ← Link ke Google Sheet Anda
   DRIVE_FOLDER_URL: 'https://drive.google.com/drive/folders/1iKYLui7SOXZxO8Sl72c3qfBqeVUAD5Wz?usp=sharing',      // ← Link ke Google Drive Folder Anda
 
   // Organizational Info
@@ -275,7 +275,7 @@ const DEMO_DATA = {
       category: 'Umum',
       year: 2024,
       file_url: '#',
-      tags: 'UKK, laporan, semester I',
+      tags: 'UKK, laporan, semester I, UKK Keren',
       featured: true,
       status: 'published'
     },

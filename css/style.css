@@ -3,7 +3,7 @@
    ============================================================ */
 
 /* ---- Google Fonts ---- */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 /* ---- CSS Variables ---- */
 :root {
@@ -58,7 +58,7 @@
   --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
 
-  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
   --nav-height: 68px;
 }
@@ -75,6 +75,7 @@ body {
   font-family: var(--font);
   background: var(--slate-50);
   color: var(--slate-800);
+  font-size: 15px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
@@ -120,6 +121,7 @@ input, select { font-family: var(--font); }
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  position: relative;
 }
 
 .nav-brand {
@@ -150,7 +152,7 @@ input, select { font-family: var(--font); }
 }
 
 .nav-title-main {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--white);
   line-height: 1.2;
@@ -158,7 +160,7 @@ input, select { font-family: var(--font); }
 }
 
 .nav-title-sub {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--blue-300);
   font-weight: 400;
   line-height: 1.2;
@@ -168,12 +170,15 @@ input, select { font-family: var(--font); }
   display: flex;
   align-items: center;
   gap: 4px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .nav-link {
-  padding: 8px 14px;
+  padding: 8px 16px;
   color: rgba(255,255,255,0.75);
-  font-size: 13.5px;
+  font-size: 15px;
   font-weight: 500;
   border-radius: var(--radius-sm);
   transition: all var(--transition-fast);
@@ -342,10 +347,10 @@ input, select { font-family: var(--font); }
 }
 
 .hero-title {
-  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-size: clamp(2.5rem, 5.5vw, 4.5rem);
   font-weight: 800;
   color: var(--white);
-  line-height: 1.15;
+  line-height: 1.1;
   letter-spacing: -1.5px;
   margin-bottom: 20px;
   animation: fadeInDown 0.8s ease 0.1s both;
@@ -359,11 +364,11 @@ input, select { font-family: var(--font); }
 }
 
 .hero-subtitle {
-  font-size: clamp(1rem, 2vw, 1.2rem);
+  font-size: clamp(1rem, 1.8vw, 1.25rem);
   color: rgba(255,255,255,0.75);
   max-width: 560px;
   margin-bottom: 40px;
-  line-height: 1.7;
+  line-height: 1.65;
   font-weight: 400;
   animation: fadeInDown 0.8s ease 0.2s both;
 }
@@ -397,7 +402,7 @@ input, select { font-family: var(--font); }
   padding: 16px 24px;
   background: var(--gradient-btn);
   color: white;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -434,7 +439,7 @@ input, select { font-family: var(--font); }
 }
 
 .hero-stat-number {
-  font-size: 2rem;
+  font-size: 2.25rem;
   font-weight: 800;
   color: var(--white);
   letter-spacing: -1px;
@@ -443,7 +448,7 @@ input, select { font-family: var(--font); }
 }
 
 .hero-stat-label {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--blue-200);
   font-weight: 500;
   text-transform: uppercase;
@@ -521,7 +526,7 @@ input, select { font-family: var(--font); }
   align-items: center;
   gap: 8px;
   padding: 18px 22px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--slate-500);
   border-bottom: 2px solid transparent;
@@ -673,17 +678,18 @@ input, select { font-family: var(--font); }
 }
 
 .section-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--slate-800);
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 800;
+  color: var(--slate-900);
   letter-spacing: -0.5px;
 }
 
 .section-subtitle {
-  font-size: 14px;
-  color: var(--slate-500);
-  margin-top: 4px;
+  font-size: 16px;
+  color: var(--slate-600);
+  margin-top: 6px;
   font-weight: 400;
+  line-height: 1.6;
 }
 
 .section-count {
@@ -894,17 +900,17 @@ input, select { font-family: var(--font); }
 }
 
 .chart-card-title {
-  font-size: 15px;
+  font-size: 16.5px;
   font-weight: 700;
   color: var(--slate-800);
   margin-bottom: 6px;
-  line-height: 1.35;
+  line-height: 1.4;
 }
 
 .chart-card-desc {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--slate-500);
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 .chart-card-body {
@@ -1036,7 +1042,7 @@ input, select { font-family: var(--font); }
 .card-icon-visualization { background: #2563EB; } /* Royal Blue */
 
 .card-title {
-  font-size: 15px;
+  font-size: 16.5px;
   font-weight: 700;
   color: var(--slate-800);
   line-height: 1.4;
@@ -1047,13 +1053,13 @@ input, select { font-family: var(--font); }
 }
 
 .card-author {
-  font-size: 13px;
+  font-size: 13.5px;
   color: var(--blue-600);
   font-weight: 500;
 }
 
 .card-desc {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--slate-500);
   line-height: 1.6;
   display: -webkit-box;
@@ -1111,9 +1117,9 @@ input, select { font-family: var(--font); }
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 9px 16px;
+  padding: 10px 18px;
   border-radius: var(--radius-sm);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   transition: all var(--transition-fast);
   cursor: pointer;
@@ -1436,16 +1442,14 @@ input, select { font-family: var(--font); }
 .footer {
   background: var(--slate-900);
   color: var(--slate-400);
-  padding: 60px 24px 32px;
-  margin-top: 80px;
+  padding: 40px 24px 24px;
+  margin-top: 60px;
 }
 
 .footer-inner {
   max-width: 1280px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 48px;
+  display: block;
 }
 
 .footer-brand {
@@ -1489,7 +1493,7 @@ input, select { font-family: var(--font); }
   font-size: 13.5px;
   line-height: 1.7;
   color: var(--slate-400);
-  max-width: 340px;
+  max-width: 720px;
 }
 
 .footer-contact-item {

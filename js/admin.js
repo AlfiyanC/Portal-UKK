@@ -106,10 +106,34 @@ const Admin = {
       const el = document.getElementById(id);
       if (el) el.textContent = val;
     };
-    setVal('admin-stat-datasets', DEMO_DATA.datasets.length);
-    setVal('admin-stat-publications', DEMO_DATA.publications.length);
-    setVal('admin-stat-visualizations', DEMO_DATA.visualizations.length);
-    setVal('admin-stat-presentations', DEMO_DATA.presentations.length);
+
+    if (CONFIG.DEMO_MODE || !CONFIG.SHEET_ID) {
+      setVal('admin-stat-datasets', DEMO_DATA.datasets.length);
+      setVal('admin-stat-publications', DEMO_DATA.publications.length);
+      setVal('admin-stat-visualizations', DEMO_DATA.visualizations.length);
+      setVal('admin-stat-presentations', DEMO_DATA.presentations.length);
+      return;
+    }
+
+    setVal('admin-stat-datasets', '…');
+    setVal('admin-stat-publications', '…');
+    setVal('admin-stat-visualizations', '…');
+    setVal('admin-stat-presentations', '…');
+
+    if (typeof SheetsAPI !== 'undefined') {
+      SheetsAPI.fetchAll().then(data => {
+        setVal('admin-stat-datasets', data.datasets.length);
+        setVal('admin-stat-publications', data.publications.length);
+        setVal('admin-stat-visualizations', data.visualizations.length);
+        setVal('admin-stat-presentations', data.presentations.length);
+      }).catch(err => {
+        console.warn('Gagal memuat stats admin dari Sheets:', err);
+        setVal('admin-stat-datasets', 0);
+        setVal('admin-stat-publications', 0);
+        setVal('admin-stat-visualizations', 0);
+        setVal('admin-stat-presentations', 0);
+      });
+    }
   },
 
   renderConfigStatus() {

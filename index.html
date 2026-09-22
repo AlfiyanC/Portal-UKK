@@ -12,6 +12,7 @@
   <meta name="theme-color" content="#1E40AF">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
@@ -350,22 +351,22 @@
     <div>
       <h3 class="footer-col-title">Navigasi</h3>
       <nav class="footer-links" aria-label="Footer navigasi">
-        <a href="#tab-section" class="footer-link" onclick="App.switchTab('visualizations')">Visualisasi Data</a>
-        <a href="#tab-section" class="footer-link" onclick="App.switchTab('datasets')">Dataset</a>
-        <a href="#tab-section" class="footer-link" onclick="App.switchTab('publications')">Publikasi</a>
-        <a href="#tab-section" class="footer-link" onclick="App.switchTab('presentations')">Bahan Paparan</a>
-        <a href="admin.html" class="footer-link">Panel Admin</a>
+        <a href="#tab-section" class="footer-link" onclick="App.switchTab('visualizations')">📊 Visualisasi Data</a>
+        <a href="#tab-section" class="footer-link" onclick="App.switchTab('datasets')">📁 Dataset</a>
+        <a href="#tab-section" class="footer-link" onclick="App.switchTab('publications')">📄 Publikasi</a>
+        <a href="#tab-section" class="footer-link" onclick="App.switchTab('presentations')">📑 Bahan Paparan</a>
+        <a href="admin.html" class="footer-link">🔐 Panel Admin</a>
       </nav>
     </div>
 
     <div>
       <h3 class="footer-col-title">Tautan</h3>
       <nav class="footer-links" aria-label="Tautan eksternal">
-        <a href="https://www.bps.go.id" target="_blank" rel="noopener" class="footer-link">BPS Pusat</a>
-        <a href="https://ntb.bps.go.id" target="_blank" rel="noopener" class="footer-link">BPS Provinsi NTB</a>
-        <a href="https://satudataindonesia.go.id" target="_blank" rel="noopener" class="footer-link">Satu Data Indonesia</a>
-        <a href="#" id="footer-sheet-link" class="footer-link">Google Sheet (Admin)</a>
-        <a href="#" id="footer-drive-link" class="footer-link">Google Drive (Admin)</a>
+        <a href="https://www.bps.go.id" target="_blank" rel="noopener" class="footer-link">🌐 BPS Pusat</a>
+        <a href="https://ntb.bps.go.id" target="_blank" rel="noopener" class="footer-link">🌐 BPS Provinsi NTB</a>
+        <a href="https://satudataindonesia.go.id" target="_blank" rel="noopener" class="footer-link">📊 Satu Data Indonesia</a>
+        <a href="#" id="footer-sheet-link" class="footer-link">📋 Google Sheet (Admin)</a>
+        <a href="#" id="footer-drive-link" class="footer-link">📂 Google Drive (Admin)</a>
       </nav>
     </div>
   </div>
@@ -421,14 +422,17 @@
 <script src="js/app.js"></script>
 <script>
   // Footer year
-  document.getElementById('footer-year').textContent = new Date().getFullYear();
+  const yearEl = document.getElementById('footer-year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  // Footer admin links
-  if (CONFIG.SHEET_URL && CONFIG.SHEET_URL !== '#') {
-    document.getElementById('footer-sheet-link').href = CONFIG.SHEET_URL;
+  // Footer admin links (if present)
+  const sheetLink = document.getElementById('footer-sheet-link');
+  if (sheetLink && CONFIG.SHEET_URL && CONFIG.SHEET_URL !== '#') {
+    sheetLink.href = CONFIG.SHEET_URL;
   }
-  if (CONFIG.DRIVE_FOLDER_URL && CONFIG.DRIVE_FOLDER_URL !== '#') {
-    document.getElementById('footer-drive-link').href = CONFIG.DRIVE_FOLDER_URL;
+  const driveLink = document.getElementById('footer-drive-link');
+  if (driveLink && CONFIG.DRIVE_FOLDER_URL && CONFIG.DRIVE_FOLDER_URL !== '#') {
+    driveLink.href = CONFIG.DRIVE_FOLDER_URL;
   }
 </script>
 </body>
