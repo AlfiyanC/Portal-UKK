@@ -347,28 +347,6 @@
         </div>
       </div>
     </div>
-
-    <div>
-      <h3 class="footer-col-title">Navigasi</h3>
-      <nav class="footer-links" aria-label="Footer navigasi">
-        <a href="#tab-section" class="footer-link" onclick="App.switchTab('visualizations')">📊 Visualisasi Data</a>
-        <a href="#tab-section" class="footer-link" onclick="App.switchTab('datasets')">📁 Dataset</a>
-        <a href="#tab-section" class="footer-link" onclick="App.switchTab('publications')">📄 Publikasi</a>
-        <a href="#tab-section" class="footer-link" onclick="App.switchTab('presentations')">📑 Bahan Paparan</a>
-        <a href="admin.html" class="footer-link">🔐 Panel Admin</a>
-      </nav>
-    </div>
-
-    <div>
-      <h3 class="footer-col-title">Tautan</h3>
-      <nav class="footer-links" aria-label="Tautan eksternal">
-        <a href="https://www.bps.go.id" target="_blank" rel="noopener" class="footer-link">🌐 BPS Pusat</a>
-        <a href="https://ntb.bps.go.id" target="_blank" rel="noopener" class="footer-link">🌐 BPS Provinsi NTB</a>
-        <a href="https://satudataindonesia.go.id" target="_blank" rel="noopener" class="footer-link">📊 Satu Data Indonesia</a>
-        <a href="#" id="footer-sheet-link" class="footer-link">📋 Google Sheet (Admin)</a>
-        <a href="#" id="footer-drive-link" class="footer-link">📂 Google Drive (Admin)</a>
-      </nav>
-    </div>
   </div>
 
   <div class="footer-bottom">

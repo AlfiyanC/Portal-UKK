@@ -1537,7 +1537,7 @@ input, select { font-family: var(--font); }
 
 .footer-bottom {
   max-width: 1280px;
-  margin: 48px auto 0;
+  margin: 32px auto 0;
   padding-top: 24px;
   border-top: 1px solid var(--slate-800);
   display: flex;
@@ -1609,8 +1609,6 @@ input, select { font-family: var(--font); }
    ============================================================ */
 @media (max-width: 1024px) {
   .charts-grid { grid-template-columns: 1fr; }
-  .footer-inner { grid-template-columns: 1fr 1fr; }
-  .footer-brand { grid-column: 1 / -1; }
 }
 
 @media (max-width: 768px) {
@@ -1658,8 +1656,6 @@ input, select { font-family: var(--font); }
 
   .modal-header, .modal-body, .modal-actions { padding-left: 20px; padding-right: 20px; }
   .modal-field-row { grid-template-columns: 1fr; }
-
-  .footer-inner { grid-template-columns: 1fr; gap: 32px; }
   .footer-bottom { flex-direction: column; align-items: flex-start; }
 
   .hero-search { max-width: 100%; }
