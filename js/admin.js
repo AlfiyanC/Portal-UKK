@@ -110,11 +110,13 @@ const Admin = {
       if (el) el.textContent = val;
     };
 
+    const isPub = item => String(item.status || 'published').trim().toLowerCase() !== 'draft';
+
     if (CONFIG.DEMO_MODE || !CONFIG.SHEET_ID) {
-      setVal('admin-stat-datasets', DEMO_DATA.datasets.length);
-      setVal('admin-stat-publications', DEMO_DATA.publications.length);
-      setVal('admin-stat-visualizations', DEMO_DATA.visualizations.length);
-      setVal('admin-stat-presentations', DEMO_DATA.presentations.length);
+      setVal('admin-stat-datasets', DEMO_DATA.datasets.filter(isPub).length);
+      setVal('admin-stat-publications', DEMO_DATA.publications.filter(isPub).length);
+      setVal('admin-stat-visualizations', DEMO_DATA.visualizations.filter(isPub).length);
+      setVal('admin-stat-presentations', DEMO_DATA.presentations.filter(isPub).length);
       return;
     }
 
@@ -125,10 +127,10 @@ const Admin = {
 
     if (typeof SheetsAPI !== 'undefined') {
       SheetsAPI.fetchAll().then(data => {
-        setVal('admin-stat-datasets', data.datasets.length);
-        setVal('admin-stat-publications', data.publications.length);
-        setVal('admin-stat-visualizations', data.visualizations.length);
-        setVal('admin-stat-presentations', data.presentations.length);
+        setVal('admin-stat-datasets', data.datasets.filter(isPub).length);
+        setVal('admin-stat-publications', data.publications.filter(isPub).length);
+        setVal('admin-stat-visualizations', data.visualizations.filter(isPub).length);
+        setVal('admin-stat-presentations', data.presentations.filter(isPub).length);
       }).catch(err => {
         console.warn('Gagal memuat stats admin dari Sheets:', err);
         setVal('admin-stat-datasets', 0);

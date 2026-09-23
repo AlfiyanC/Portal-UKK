@@ -48,9 +48,10 @@ const App = {
       // Jika tab visualisasi kosong tapi ada data di tab lain (misal datasets),
       // otomatis alihkan tab aktif ke tab yang memiliki data agar halaman tidak terlihat kosong.
       const tabs = ['visualizations', 'datasets', 'publications', 'presentations'];
-      const activeTabHasData = (this.state.data[this.state.activeTab] || []).length > 0;
+      const isPub = item => String(item.status || 'published').trim().toLowerCase() !== 'draft';
+      const activeTabHasData = (this.state.data[this.state.activeTab] || []).filter(isPub).length > 0;
       if (!activeTabHasData) {
-        const firstWithData = tabs.find(t => (this.state.data[t] || []).length > 0);
+        const firstWithData = tabs.find(t => (this.state.data[t] || []).filter(isPub).length > 0);
         if (firstWithData) {
           this.state.activeTab = firstWithData;
           document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -80,10 +81,11 @@ const App = {
       const el = document.getElementById(id);
       if (el) { el.dataset.target = val; el.textContent = '0'; }
     };
-    setCount('stat-datasets', datasets.filter(d => d.status !== 'draft').length);
-    setCount('stat-publications', publications.filter(p => p.status !== 'draft').length);
-    setCount('stat-visualizations', visualizations.filter(v => v.status !== 'draft').length);
-    setCount('stat-presentations', presentations.filter(p => p.status !== 'draft').length);
+    const isPub = item => String(item.status || 'published').trim().toLowerCase() !== 'draft';
+    setCount('stat-datasets', datasets.filter(isPub).length);
+    setCount('stat-publications', publications.filter(isPub).length);
+    setCount('stat-visualizations', visualizations.filter(isPub).length);
+    setCount('stat-presentations', presentations.filter(isPub).length);
   },
 
   animateCounters() {
@@ -131,21 +133,23 @@ const App = {
 
   updateTabCounts() {
     const { visualizations, datasets, publications, presentations } = this.state.data;
+    const isPub = item => String(item.status || 'published').trim().toLowerCase() !== 'draft';
     const setCnt = (tab, count) => {
       const el = document.querySelector(`[data-tab="${tab}"] .tab-count`);
       if (el) el.textContent = count;
     };
-    setCnt('visualizations', visualizations.length);
-    setCnt('datasets', datasets.length);
-    setCnt('publications', publications.length);
-    setCnt('presentations', presentations.length);
+    setCnt('visualizations', visualizations.filter(isPub).length);
+    setCnt('datasets', datasets.filter(isPub).length);
+    setCnt('publications', publications.filter(isPub).length);
+    setCnt('presentations', presentations.filter(isPub).length);
   },
 
   // ---- Filtering ----
   getFiltered(items) {
     const q = this.state.searchQuery.toLowerCase();
     return items.filter(item => {
-      if (item.status === 'draft') return false;
+      const status = String(item.status || 'published').trim().toLowerCase();
+      if (status === 'draft') return false;
       const matchSearch = !q ||
         (item.title || '').toLowerCase().includes(q) ||
         (item.description || '').toLowerCase().includes(q) ||
