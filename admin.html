@@ -9,6 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/admin.css">
+  <!-- Chart.js for Live Preview in Admin -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 </head>
 <body>
 
@@ -194,6 +196,15 @@
               <svg class="quick-action-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
             </a>
 
+            <a href="#chart-builder-section" class="quick-action" style="border:1.5px solid var(--blue-300);background:var(--blue-50);">
+              <div class="quick-action-icon" style="background:var(--blue-600);color:#fff;" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></div>
+              <div class="quick-action-text">
+                <div class="quick-action-title" style="color:var(--blue-800);font-weight:700;">Chart Data Builder ✨</div>
+                <div class="quick-action-desc" style="color:var(--blue-600);">Input grafik bulanan mudah tanpa ketik JSON + Live Preview</div>
+              </div>
+              <svg class="quick-action-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+            </a>
+
             <a href="index.html#tab-visualizations" class="quick-action" target="_blank">
               <div class="quick-action-icon qa-icon-viz" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="18" y="3" width="4" height="18"/><rect x="10" y="8" width="4" height="13"/><rect x="2" y="13" width="4" height="8"/></svg></div>
               <div class="quick-action-text">
@@ -287,6 +298,217 @@
 
     </div>
 
+    <!-- ============================================================
+         CHART DATA BUILDER / GENERATOR (OPSI 2)
+         ============================================================ -->
+    <div class="admin-card chart-builder-card" id="chart-builder-section">
+      <div class="admin-card-header" style="justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div class="admin-card-icon" style="background:#EEF2FF;" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/>
+            </svg>
+          </div>
+          <div>
+            <div class="admin-card-title" style="display:flex;align-items:center;gap:8px;">
+              <span>Pembuat &amp; Editor Data Visualisasi</span>
+              <span class="badge-builder-highlight">Solusi Update Bulanan</span>
+            </div>
+            <div class="admin-card-sub">Input atau perbarui grafik bulanan tanpa mengetik JSON manual — tabel interaktif, paste dari Excel, &amp; live preview.</div>
+          </div>
+        </div>
+        <div class="cb-header-actions">
+          <button type="button" class="btn-cb-secondary" id="btn-toggle-json-import" onclick="ChartBuilder.toggleJsonImport()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Buka / Edit Data Lama</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="admin-card-body">
+
+        <!-- Drawer: Import Data Lama (Reverse-parse JSON) -->
+        <div id="cb-json-import-drawer" class="cb-json-drawer" style="display:none;">
+          <div class="cb-drawer-header">
+            <strong>Buka &amp; Edit Data Grafik yang Sudah Ada di Google Sheet:</strong>
+            <p>Salin isi sel kolom <code>data_json</code> dari Google Sheet Anda dan tempel di bawah ini untuk memuatnya kembali ke tabel input editor.</p>
+          </div>
+          <div class="cb-drawer-body">
+            <textarea id="cb-import-json-input" class="cb-textarea" rows="3" placeholder='Contoh: {"labels":["Jan 2024","Feb 2024"],"datasets":[{"label":"Inflasi (%)","data":[2.85,3.10]}]}'></textarea>
+            <div style="display:flex;gap:10px;margin-top:8px;">
+              <button type="button" class="btn-cb-primary" onclick="ChartBuilder.importJson()">
+                Muat ke Tabel Editor
+              </button>
+              <button type="button" class="btn-cb-text" onclick="ChartBuilder.toggleJsonImport(false)">
+                Tutup
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="cb-grid-layout">
+          <!-- SISI KIRI: Form Pengaturan & Tabel Input Data -->
+          <div class="cb-left-col">
+            
+            <!-- Metadata & Setting -->
+            <div class="cb-meta-panel">
+              <div class="cb-form-row">
+                <div class="cb-form-group flex-2">
+                  <label class="cb-label" for="cb-title">Judul Visualisasi</label>
+                  <input type="text" id="cb-title" class="cb-input" value="Perkembangan Tingkat Inflasi Bulanan NTB 2024" placeholder="Misal: Tingkat Inflasi NTB 2024" oninput="ChartBuilder.updateChart()">
+                </div>
+                <div class="cb-form-group flex-1">
+                  <label class="cb-label" for="cb-chart-type">Tipe Grafik</label>
+                  <select id="cb-chart-type" class="cb-select" onchange="ChartBuilder.onTypeChange()">
+                    <option value="line" selected>Garis (Line Chart)</option>
+                    <option value="area">Area Bertumpuk (Filled Line)</option>
+                    <option value="bar">Batang (Bar Chart)</option>
+                    <option value="horizontalBar">Batang Horizontal</option>
+                    <option value="pie">Lingkaran (Pie Chart)</option>
+                    <option value="doughnut">Donat (Doughnut Chart)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="cb-form-row">
+                <div class="cb-form-group flex-2">
+                  <label class="cb-label" for="cb-series-name">Nama Seri / Label Data</label>
+                  <input type="text" id="cb-series-name" class="cb-input" value="Inflasi Gabungan NTB (%)" placeholder="Misal: Inflasi (%)" oninput="ChartBuilder.updateChart()">
+                </div>
+                <div class="cb-form-group flex-1">
+                  <label class="cb-label" for="cb-category">Kategori</label>
+                  <select id="cb-category" class="cb-select">
+                    <option value="Ekonomi" selected>Ekonomi</option>
+                    <option value="Kemiskinan">Kemiskinan</option>
+                    <option value="Kependudukan">Kependudukan</option>
+                    <option value="Ketenagakerjaan">Ketenagakerjaan</option>
+                    <option value="Pertanian">Pertanian</option>
+                    <option value="Sosial">Sosial</option>
+                    <option value="Umum">Umum</option>
+                  </select>
+                </div>
+                <div class="cb-form-group flex-1">
+                  <label class="cb-label" for="cb-palette">Warna Grafik</label>
+                  <select id="cb-palette" class="cb-select" onchange="ChartBuilder.updateChart()">
+                    <option value="blue" selected>Biru BPS (Standar)</option>
+                    <option value="green">Hijau Emerald</option>
+                    <option value="orange">Oranye Sunset</option>
+                    <option value="purple">Ungu Modern</option>
+                    <option value="multi">Warna-Warni (Multi-color)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Toolbar Input Data -->
+            <div class="cb-table-toolbar">
+              <div class="cb-toolbar-left">
+                <strong style="font-size:13.5px;color:var(--slate-800);">Tabel Data Periode &amp; Angka</strong>
+                <span class="cb-row-count" id="cb-row-counter">0 baris</span>
+              </div>
+              <div class="cb-toolbar-right">
+                <button type="button" class="btn-cb-pill" onclick="ChartBuilder.add12MonthsPreset()" title="Isi otomatis Januari sampai Desember">+ 12 Bulan (Jan-Des)</button>
+                <button type="button" class="btn-cb-pill" onclick="ChartBuilder.addNtbKabKotaPreset()" title="Isi otomatis 10 Kabupaten/Kota NTB">+ 10 Kab/Kota NTB</button>
+                <button type="button" class="btn-cb-pill" onclick="ChartBuilder.toggleExcelPaste()" id="btn-toggle-excel">📋 Paste dari Excel</button>
+                <button type="button" class="btn-cb-pill danger" onclick="ChartBuilder.clearAllRows()" title="Hapus semua baris">🗑️ Kosongkan</button>
+              </div>
+            </div>
+
+            <!-- Box Paste Excel (Toggled) -->
+            <div id="cb-excel-paste-box" class="cb-excel-box" style="display:none;">
+              <label class="cb-label" style="margin-bottom:4px;">Tempel / Paste Langsung dari Microsoft Excel atau Google Sheet:</label>
+              <p style="font-size:12px;color:var(--slate-500);margin-bottom:8px;">Copy 2 kolom (Kolom 1: Nama Bulan/Wilayah, Kolom 2: Angka Nilai) di Excel, lalu Ctrl+V di bawah ini:</p>
+              <textarea id="cb-excel-textarea" class="cb-textarea" rows="4" placeholder="Januari 2024&#9;2.85&#10;Februari 2024&#9;3.10&#10;Maret 2024&#9;2.95"></textarea>
+              <div style="display:flex;gap:8px;margin-top:8px;">
+                <button type="button" class="btn-cb-primary" onclick="ChartBuilder.applyExcelPaste()">Terapkan Data Excel</button>
+                <button type="button" class="btn-cb-text" onclick="ChartBuilder.toggleExcelPaste(false)">Batal</button>
+              </div>
+            </div>
+
+            <!-- Interactive Table -->
+            <div class="cb-table-wrapper">
+              <table class="cb-table" id="cb-table">
+                <thead>
+                  <tr>
+                    <th style="width:40px;text-align:center;">#</th>
+                    <th>Periode / Label (Bulan / Tahun / Wilayah)</th>
+                    <th style="width:170px;">Nilai Data (Angka)</th>
+                    <th style="width:50px;text-align:center;">Hapus</th>
+                  </tr>
+                </thead>
+                <tbody id="cb-table-body">
+                  <!-- Generated dynamically via JS -->
+                </tbody>
+              </table>
+            </div>
+
+            <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+              <button type="button" class="btn-cb-add-row" onclick="ChartBuilder.addRow()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <span>+ Tambah Baris Bulan Baru</span>
+              </button>
+              <span style="font-size:12px;color:var(--slate-500);">Tip: Bisa gunakan koma (<code>2,85</code>) atau titik (<code>2.85</code>) untuk desimal.</span>
+            </div>
+
+          </div>
+
+          <!-- SISI KANAN: Live Preview & Ready Output -->
+          <div class="cb-right-col">
+            
+            <!-- Live Preview -->
+            <div class="cb-preview-card">
+              <div class="cb-preview-header">
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <span class="cb-live-dot" aria-hidden="true"></span>
+                  <span style="font-size:13px;font-weight:700;color:var(--slate-700);">Pratinjau Grafik (Live)</span>
+                </div>
+                <span class="cb-type-badge" id="cb-badge-type">Garis (Line)</span>
+              </div>
+              <div class="cb-canvas-container">
+                <canvas id="cb-chart-canvas"></canvas>
+              </div>
+            </div>
+
+            <!-- Output Kode Siap Pakai -->
+            <div class="cb-output-card">
+              <div class="cb-output-header">
+                <span style="font-size:13px;font-weight:700;color:var(--slate-800);">Hasil Siap Salin ke Google Sheet</span>
+                <div class="cb-output-tabs">
+                  <button type="button" class="cb-tab-btn active" id="btn-tab-json" onclick="ChartBuilder.switchOutputTab('json')">data_json</button>
+                  <button type="button" class="cb-tab-btn" id="btn-tab-row" onclick="ChartBuilder.switchOutputTab('row')">1 Baris Penuh Sheet</button>
+                </div>
+              </div>
+
+              <div class="cb-output-body">
+                <textarea id="cb-output-text" class="cb-output-textarea" readonly rows="5"></textarea>
+                
+                <div class="cb-actions-bar">
+                  <button type="button" class="btn-cb-copy" id="btn-cb-copy-main" onclick="ChartBuilder.copyOutput()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    <span id="btn-cb-copy-label">Salin Kode data_json</span>
+                  </button>
+                </div>
+
+                <div class="cb-instruction-box">
+                  <div class="cb-inst-step">
+                    <strong>Cara Penggunaan di Google Sheet:</strong>
+                    <ol style="margin-top:6px;padding-left:16px;display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--slate-600);">
+                      <li>Klik tombol biru <strong>"Salin Kode data_json"</strong> di atas.</li>
+                      <li>Buka Google Sheet, pilih tab <code>visualizations</code>.</li>
+                      <li>Cari baris visualisasi yang ingin diperbarui, klik dua kali pada sel kolom <code>data_json</code>.</li>
+                      <li>Tekan <strong>Ctrl + V</strong> (Paste) lalu tekan <strong>Enter</strong>. Selesai!</li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <!-- Sheet Column Reference -->
     <div class="admin-card sheet-ref">
       <div class="admin-card-header">
@@ -363,5 +585,8 @@
     }
   }
 </script>
+<!-- Admin Toast Container -->
+<div id="admin-toast-container" class="admin-toast-container" aria-live="polite"></div>
+
 </body>
 </html>
