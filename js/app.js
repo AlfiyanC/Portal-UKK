@@ -272,7 +272,8 @@ const App = {
 
   createDatasetCard(item) {
     const tags = item.tags ? item.tags.split(',').map(t => t.trim()).slice(0, 3) : [];
-    const typeClass = `badge-type-${(item.file_type || 'default').toLowerCase()}`;
+    const fileType = detectFileType(item, 'XLSX');
+    const typeClass = `badge-type-${fileType.toLowerCase()}`;
     const hasUrl = isValidUrl(item.file_url);
     return `
     <div class="content-card ${item.featured ? 'featured' : ''}" data-id="${item.id}">
@@ -280,7 +281,7 @@ const App = {
         <div class="card-badges">
           ${item.featured ? `<span class="badge badge-featured">${iconStar(12)} Unggulan</span>` : ''}
           <span class="badge badge-category">${item.category || 'Umum'}</span>
-          ${item.file_type ? `<span class="badge ${typeClass}">${item.file_type}</span>` : ''}
+          <span class="badge ${typeClass}">${fileType}</span>
         </div>
         <div class="card-icon card-icon-dataset">${iconFolder(24)}</div>
       </div>
@@ -314,6 +315,8 @@ const App = {
 
   createPublicationCard(item) {
     const tags = item.tags ? item.tags.split(',').map(t => t.trim()).slice(0, 3) : [];
+    const fileType = detectFileType(item, 'PDF');
+    const typeClass = `badge-type-${fileType.toLowerCase()}`;
     const hasUrl = isValidUrl(item.file_url);
     return `
     <div class="content-card ${item.featured ? 'featured' : ''}">
@@ -321,7 +324,7 @@ const App = {
         <div class="card-badges">
           ${item.featured ? `<span class="badge badge-featured">${iconStar(12)} Unggulan</span>` : ''}
           <span class="badge badge-category">${item.category || 'Umum'}</span>
-          <span class="badge badge-type-pdf">PDF</span>
+          <span class="badge ${typeClass}">${fileType}</span>
         </div>
         <div class="card-icon card-icon-publication">${iconFileText(24)}</div>
       </div>
@@ -355,15 +358,18 @@ const App = {
 
   createPresentationCard(item) {
     const tags = item.tags ? item.tags.split(',').map(t => t.trim()).slice(0, 3) : [];
+    const fileType = detectFileType(item, 'PPTX');
+    const typeClass = `badge-type-${fileType.toLowerCase()}`;
     const hasUrl = isValidUrl(item.file_url);
     return `
     <div class="content-card ${item.featured ? 'featured' : ''}">
       <div class="card-top">
         <div class="card-badges">
           ${item.featured ? `<span class="badge badge-featured">${iconStar(12)} Unggulan</span>` : ''}
-          <span class="badge badge-type-pptx">PPTX</span>
+          <span class="badge badge-category">${item.category || 'Umum'}</span>
+          <span class="badge ${typeClass}">${fileType}</span>
         </div>
-        <div class="card-icon card-icon-presentation">${iconPresentation(24)}</div>
+        <div class="card-icon card-icon-presentation">${fileType === 'PDF' ? iconFileText(24) : iconPresentation(24)}</div>
       </div>
       <h3 class="card-title">${item.title}</h3>
       ${item.event ? `<p class="card-author">${iconMic(12)} ${item.event}</p>` : ''}
@@ -405,6 +411,8 @@ const App = {
     categoryEl.textContent = typeLabels[type] || type;
     titleEl.textContent = item.title;
 
+    const detectedType = detectFileType(item, type === 'datasets' ? 'XLSX' : type === 'publications' ? 'PDF' : 'PPTX');
+
     const fields = [];
     if (item.author) fields.push({ label: 'Penulis/Tim', value: item.author });
     if (item.event) fields.push({ label: 'Acara/Kegiatan', value: item.event });
@@ -412,7 +420,7 @@ const App = {
     if (item.description) fields.push({ label: 'Deskripsi', value: item.description });
     if (item.category) fields.push({ label: 'Kategori', value: item.category });
     if (item.year) fields.push({ label: 'Tahun', value: item.year });
-    if (item.file_type) fields.push({ label: 'Format File', value: item.file_type });
+    if (detectedType) fields.push({ label: 'Format File', value: detectedType });
     if (item.file_size) fields.push({ label: 'Ukuran File', value: item.file_size });
     if (item.tags) fields.push({ label: 'Tag', value: item.tags.split(',').map(t => `<span class="card-tag" style="display:inline-block;margin:2px;">#${t.trim()}</span>`).join('') });
 
@@ -664,6 +672,73 @@ const App = {
 // ---- Utility Functions ----
 function isValidUrl(url) {
   return !!(url && typeof url === 'string' && (url.startsWith('http://') || url.startsWith('https://')));
+}
+
+function detectFileType(item, fallback = 'DEFAULT') {
+  if (!item) return fallback.toUpperCase();
+
+  // 1. Jika kolom file_type diisi secara manual di Google Sheet
+  if (item.file_type && typeof item.file_type === 'string' && item.file_type.trim() !== '') {
+    return item.file_type.trim().toUpperCase();
+  }
+
+  // 2. Deteksi dari URL file
+  const rawUrl = (item.file_url || '').trim();
+  if (rawUrl && rawUrl !== '#') {
+    const url = rawUrl.toLowerCase();
+
+    // Deteksi Google Docs / Sheets / Slides
+    if (url.includes('docs.google.com/presentation') || url.includes('slides.google.com')) return 'PPTX';
+    if (url.includes('docs.google.com/spreadsheets') || url.includes('sheets.google.com')) return 'XLSX';
+    if (url.includes('docs.google.com/document')) return 'DOCX';
+
+    // Deteksi ekstensi file langsung di URL (sebelum query ? atau fragment #)
+    const cleanUrl = url.split('?')[0].split('#')[0];
+    const match = cleanUrl.match(/\.([a-z0-9]{2,5})$/i);
+    if (match) {
+      const ext = match[1].toUpperCase();
+      const extMap = {
+        'PDF': 'PDF',
+        'XLSX': 'XLSX',
+        'XLS': 'XLSX',
+        'XLSM': 'XLSX',
+        'CSV': 'CSV',
+        'PPTX': 'PPTX',
+        'PPT': 'PPTX',
+        'PPS': 'PPTX',
+        'DOCX': 'DOCX',
+        'DOC': 'DOCX',
+        'ZIP': 'ZIP',
+        'RAR': 'RAR',
+        '7Z': '7Z',
+        'PNG': 'PNG',
+        'JPG': 'JPG',
+        'JPEG': 'JPG'
+      };
+      if (extMap[ext]) return extMap[ext];
+    }
+  }
+
+  // 3. Deteksi dari teks judul atau deskripsi jika ada indikasi nama file / format
+  const text = `${item.title || ''} ${item.description || ''}`.toLowerCase();
+  if (/\b(policy\s*brief|infografis|laporan|buku|jurnal|publikasi|pedoman)\b/.test(text) || /\.pdf\b|\(pdf\)/i.test(text)) {
+    return 'PDF';
+  }
+  if (/\b(ppt|pptx|slide|paparan|presentasi|tayang)\b/.test(text) || /\.pptx?\b|\(pptx?\)/i.test(text)) {
+    return 'PPTX';
+  }
+  if (/\b(excel|xlsx|xls|tabel|data\s*mentah)\b/.test(text) || /\.xlsx?\b|\(xlsx?\)/i.test(text)) {
+    return 'XLSX';
+  }
+  if (/\b(csv)\b/.test(text) || /\.csv\b|\(csv\)/i.test(text)) {
+    return 'CSV';
+  }
+  if (/\b(word|docx|doc)\b/.test(text) || /\.docx?\b|\(docx?\)/i.test(text)) {
+    return 'DOCX';
+  }
+
+  // 4. Fallback default sesuai jenis tab
+  return fallback.toUpperCase();
 }
 
 function debounce(fn, delay) {

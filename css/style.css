@@ -1021,7 +1021,10 @@ input, select { font-family: var(--font); }
 .badge-type-xlsx { background: #DCFCE7; color: #15803D; }
 .badge-type-csv { background: #FEF9C3; color: #854D0E; }
 .badge-type-pdf { background: #FEE2E2; color: #991B1B; }
-.badge-type-pptx { background: #FEF3C7; color: #92400E; }
+.badge-type-pptx, .badge-type-ppt { background: #FEF3C7; color: #92400E; }
+.badge-type-docx, .badge-type-doc { background: #DBEAFE; color: #1D4ED8; }
+.badge-type-zip, .badge-type-rar, .badge-type-7z { background: #EDE9FE; color: #6D28D9; }
+.badge-type-png, .badge-type-jpg, .badge-type-jpeg { background: #FCE7F3; color: #9D174D; }
 .badge-type-default { background: var(--slate-100); color: var(--slate-600); }
 .badge-featured { background: linear-gradient(135deg, #FCD34D, #F59E0B); color: #78350F; }
 

@@ -35,13 +35,15 @@ id | title | description | category | year | file_url | file_size | file_type | 
 
 ### Tab `publications`
 ```
-id | title | author | description | category | year | file_url | tags | featured | status
+id | title | author | description | category | year | file_url | file_type | file_size | tags | featured | status
 ```
+*(Catatan: `file_type` dan `file_size` bersifat opsional. Jika dikosongkan, portal akan mendeteksi format file secara otomatis dari link atau nama dokumen)*
 
 ### Tab `presentations`
 ```
-id | title | event | presenter | description | year | file_url | tags | featured | status
+id | title | event | presenter | description | year | file_url | file_type | file_size | tags | featured | status
 ```
+*(Catatan: `file_type` dan `file_size` bersifat opsional. Jika dikosongkan, portal akan mendeteksi format file secara otomatis dari link atau nama dokumen)*
 
 ---
 
