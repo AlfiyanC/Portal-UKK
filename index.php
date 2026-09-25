@@ -173,13 +173,18 @@
     <span class="filter-label">Filter:</span>
     <div class="filter-chips" role="group" aria-label="Filter kategori">
       <button class="filter-chip active" data-cat="Semua">Semua</button>
-      <button class="filter-chip" data-cat="Kependudukan">Kependudukan</button>
-      <button class="filter-chip" data-cat="Ekonomi">Ekonomi</button>
+      <button class="filter-chip" data-cat="Indeks Harga Konsumen (IHK)">IHK</button>
+      <button class="filter-chip" data-cat="Nilai Tukar Petani (NTP)">NTP</button>
+      <button class="filter-chip" data-cat="Pariwisata">Pariwisata</button>
+      <button class="filter-chip" data-cat="Transportasi">Transportasi</button>
       <button class="filter-chip" data-cat="Kemiskinan">Kemiskinan</button>
-      <button class="filter-chip" data-cat="Ketenagakerjaan">Ketenagakerjaan</button>
+      <button class="filter-chip" data-cat="Gini Ratio">Gini Ratio</button>
+      <button class="filter-chip" data-cat="Ekspor-Impor">Ekspor-Impor</button>
+      <button class="filter-chip" data-cat="Pertumbuhan Ekonomi">Pertumbuhan Ekonomi</button>
       <button class="filter-chip" data-cat="Pertanian">Pertanian</button>
-      <button class="filter-chip" data-cat="Sosial">Sosial</button>
-      <button class="filter-chip" data-cat="Umum">Umum</button>
+      <button class="filter-chip" data-cat="Ketenagakerjaan">Ketenagakerjaan</button>
+      <button class="filter-chip" data-cat="Indeks Ketimpangan Gender (IKG)">IKG</button>
+      <button class="filter-chip" data-cat="Indeks Pembangunan Manusia (IPM)">IPM</button>
     </div>
     <select id="year-filter" class="filter-year" aria-label="Filter tahun">
       <option value="Semua">Semua Tahun</option>
@@ -335,7 +340,7 @@
       <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;">
         <div class="footer-contact-item">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          tim.ukk@ntb.bps.go.id
+          timukk5200@gmail.com
         </div>
         <div class="footer-contact-item">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.62 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>

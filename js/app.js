@@ -22,6 +22,7 @@ const App = {
     this.showLoading();
     await this.loadData();
     this.renderHeroStats();
+    this.buildCategoryFilter();
     this.buildYearFilter();
     this.setupEventListeners();
     this.renderActiveTab();
@@ -145,6 +146,45 @@ const App = {
   },
 
   // ---- Filtering ----
+  matchesCategory(itemCategory, selectedCategory) {
+    if (!selectedCategory || selectedCategory === 'Semua') return true;
+
+    // Jika item tidak memiliki kategori (null/kosong/'-'), sistem menggunakan default 'Umum'
+    // sebagaimana ditampilkan pada badge kartu (${item.category || 'Umum'})
+    const effectiveCategory = (itemCategory && String(itemCategory).trim() !== '' && String(itemCategory).trim() !== '-')
+      ? String(itemCategory).trim()
+      : 'Umum';
+
+    const itemCat = effectiveCategory.toLowerCase();
+    const selCat = String(selectedCategory).trim().toLowerCase();
+
+    // 1. Pencocokan langsung (case-insensitive & trimmed)
+    if (itemCat === selCat) return true;
+
+    // Helper untuk mengambil singkatan dalam kurung, misal "Indeks Harga Konsumen (IHK)" -> "ihk"
+    const extractAcronym = (str) => {
+      const match = str.match(/\(([^)]+)\)/);
+      return match ? match[1].trim().toLowerCase() : '';
+    };
+
+    // Helper untuk menghapus teks dalam kurung, misal "Indeks Harga Konsumen (IHK)" -> "indeks harga konsumen"
+    const stripParentheses = (str) => str.replace(/\s*\([^)]*\)/g, '').trim().toLowerCase();
+
+    const itemAcr = extractAcronym(itemCat);
+    const selAcr = extractAcronym(selCat);
+    const itemClean = stripParentheses(itemCat);
+    const selClean = stripParentheses(selCat);
+
+    // 2. Pencocokan singkatan (misal filter "Indeks Harga Konsumen (IHK)" cocok dengan sheet "IHK", atau sebaliknya)
+    if (selAcr && (selAcr === itemCat || selAcr === itemAcr)) return true;
+    if (itemAcr && (itemAcr === selCat || itemAcr === selAcr)) return true;
+
+    // 3. Pencocokan nama lengkap tanpa tanda kurung
+    if (itemClean && selClean && (itemClean === selClean || itemClean === selCat || selClean === itemCat)) return true;
+
+    return false;
+  },
+
   getFiltered(items) {
     const q = this.state.searchQuery.toLowerCase();
     return items.filter(item => {
@@ -157,7 +197,7 @@ const App = {
         (item.author || '').toLowerCase().includes(q) ||
         (item.event || '').toLowerCase().includes(q) ||
         (item.category || '').toLowerCase().includes(q);
-      const matchCat = this.state.selectedCategory === 'Semua' || item.category === this.state.selectedCategory;
+      const matchCat = this.matchesCategory(item.category, this.state.selectedCategory);
       const matchYear = this.state.selectedYear === 'Semua' || String(item.year) === String(this.state.selectedYear);
       return matchSearch && matchCat && matchYear;
     });
@@ -480,6 +520,19 @@ const App = {
   handleYearFilter(year) {
     this.state.selectedYear = year;
     this.renderActiveTab();
+  },
+
+  buildCategoryFilter() {
+    const container = document.querySelector('.filter-chips');
+    if (!container || !CONFIG.CATEGORIES || !CONFIG.CATEGORIES.length) return;
+
+    container.innerHTML = CONFIG.CATEGORIES.map((cat, idx) => {
+      const isObj = typeof cat === 'object' && cat !== null;
+      const label = isObj ? cat.label : cat;
+      const value = isObj ? (cat.value || cat.label) : cat;
+      const isActive = (value === this.state.selectedCategory || (idx === 0 && this.state.selectedCategory === 'Semua'));
+      return `<button class="filter-chip ${isActive ? 'active' : ''}" data-cat="${value}">${label}</button>`;
+    }).join('');
   },
 
   buildYearFilter() {

@@ -18,7 +18,7 @@ const CONFIG = {
   ORG_FULL: 'Badan Pusat Statistik Provinsi Nusa Tenggara Barat',
   ORG_SHORT: 'BPS NTB',
   TAGLINE: 'Pusat Data & Statistik Resmi Provinsi Nusa Tenggara Barat',
-  CONTACT_EMAIL: 'tim.ukk@ntb.bps.go.id',
+  CONTACT_EMAIL: 'timukk5200@gmail.com',
   CONTACT_PHONE: '(62-370) 621385',
   ADDRESS: 'Jl. Dr. Soedjono No. 74 Kelurahan Jempong Baru Kecamatan Sekarbela Kota Mataram Nusa Tenggara Barat 83116',
 
@@ -29,7 +29,27 @@ const CONFIG = {
   // Filter Options
   YEAR_START: 2018,
   YEAR_END: new Date().getFullYear(),
-  CATEGORIES: ['Semua', 'Kependudukan', 'Ekonomi', 'Kemiskinan', 'Ketenagakerjaan', 'Pertanian', 'Sosial', 'Umum'],
+
+  // PANDUAN PENGATURAN FILTER KATEGORI:
+  // - Tambah atau hapus baris di bawah untuk menambah/mengurangi filter di portal data.
+  // - Format teks biasa: 'Pariwisata'
+  // - Format objek (jika ingin teks tombol singkatan): { label: 'IHK', value: 'Indeks Harga Konsumen (IHK)' }
+  CATEGORIES: [
+    'Semua',
+    { label: 'IHK', value: 'Indeks Harga Konsumen (IHK)' },
+    { label: 'NTP', value: 'Nilai Tukar Petani (NTP)' },
+    'Pariwisata',
+    'Transportasi',
+    'Kemiskinan',
+    'Gini Ratio',
+    'Ekspor-Impor',
+    'Pertumbuhan Ekonomi',
+    'Pertanian',
+    'Ketenagakerjaan',
+    { label: 'IKG', value: 'Indeks Ketimpangan Gender (IKG)' },
+    { label: 'IPM', value: 'Indeks Pembangunan Manusia (IPM)' },
+    'Umum',
+  ],
 
   // Chart Types for interactive builder
   CHART_TYPES: [
